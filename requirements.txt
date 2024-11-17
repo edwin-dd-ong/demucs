@@ -13,9 +13,10 @@ openunmix
 pyyaml
 submitit
 torch>=1.8.1
-torchaudio>=0.8,<=2.2
+torchaudio>=0.8,<2.1
 tqdm
 treetable
 soundfile>=0.10.3;sys_platform=="win32"
 flask
+flask_cors
 gunicorn
