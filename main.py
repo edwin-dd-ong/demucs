@@ -2,8 +2,10 @@ import os
 import tempfile
 import subprocess
 from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/process', methods=['POST'])
 def process_twostem():
