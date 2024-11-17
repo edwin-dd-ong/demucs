@@ -32,19 +32,19 @@ def process_twostem():
     except subprocess.CalledProcessError as e:
         return jsonify({"error": f"Demucs processing failed: {str(e)}"}), 500
 
-    # Locate the non-vocal (instrumental) track
-    instrumental_file = None
+    # Locate the vocal  track
+    vocal_file = None
     for root, dirs, files in os.walk(output_dir):
         for file in files:
-            if "no_vocals" in file:  # Demucs typically labels non-vocal files as "no_vocals"
-                instrumental_file = os.path.join(root, file)
+            if "vocals" in file:  # Demucs typically labels non-vocal files as "no_vocals"
+                vocal_file = os.path.join(root, file)
                 break
 
-    if not instrumental_file:
-        return jsonify({"error": "Instrumental track not found"}), 500
+    if not vocal_file:
+        return jsonify({"error": "Vocal track not found"}), 500
 
     # Return the instrumental track
-    return send_file(instrumental_file, as_attachment=True, download_name="instrumental.mp3")
+    return send_file(vocal_file, as_attachment=True, download_name="vocal.mp3")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
