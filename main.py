@@ -1,10 +1,11 @@
 import os
 import tempfile
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, Response
 from pydub import AudioSegment
 from pydub.playback import play
 import demucs.separate
 from flask_cors import CORS
+import shutil
 
 app = Flask(__name__)
 CORS(app)
@@ -23,12 +24,12 @@ def process_audio():
         return jsonify({"error": "No file selected"}), 400
 
     # Save uploaded file to a temporary location
-    temp_dir = tempfile.TemporaryDirectory()
-    input_file_path = os.path.join(temp_dir.name, audio_file.filename)
+    temp_dir = tempfile.mkdtemp()  
+    input_file_path = os.path.join(temp_dir, audio_file.filename)
     audio_file.save(input_file_path)
     print(f"File saved at: {input_file_path}")
 
-    output_dir = os.path.join(temp_dir.name, "demucs_output")
+    output_dir = os.path.join(temp_dir, "demucs_output")
     os.makedirs(output_dir, exist_ok=True)
 
     try:
@@ -54,12 +55,25 @@ def process_audio():
             print(f"Vocal track not found for file: {input_file_path}")
             return jsonify({"error": "Vocal track not found"}), 500
 
+        def stream_file(file_path, chunk_size=8192):
+            """Stream a file in chunks."""
+            htdemucs_dir = os.path.join(output_dir)
+            print(f"Contents of {htdemucs_dir}: {os.listdir(htdemucs_dir)}")
+            with open(file_path, 'rb') as f:
+                while chunk := f.read(chunk_size):
+                    yield chunk
+
         # Return the processed audio file
-        return send_file(vocal_file, as_attachment=True)
+        response = Response(stream_file(vocal_file), content_type='audio/wav')
+        # Delay cleanup after the response
+        response.call_on_close(lambda: shutil.rmtree(temp_dir, ignore_errors=True))
+        return response
+
 
     except Exception as e:
         print(f"Error during processing: {e}")
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.debug = True
