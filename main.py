@@ -4,8 +4,10 @@ from flask import Flask, request, jsonify, send_file
 from pydub import AudioSegment
 from pydub.playback import play
 import demucs.separate
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def process_audio():
