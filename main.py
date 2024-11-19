@@ -32,16 +32,9 @@ def process_audio():
     os.makedirs(output_dir, exist_ok=True)
 
     try:
-        # Load the MP3 file
-        audio = AudioSegment.from_file(input_file_path)
-
-        # Create output directory for Demucs
-        output_dir = os.path.join(temp_dir.name, "demucs_output")
-        os.makedirs(output_dir, exist_ok=True)
 
         # Process the entire audio file with Demucs
         demucs.separate.main([
-        "--mp3",
         "--two-stems", "vocals",
         "-n", "htdemucs",
         "-o", output_dir,
