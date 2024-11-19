@@ -13,4 +13,4 @@ torchaudio>=0.8,<=2.2
 tqdm
 demucs
 numpy==1.26.4
-
+pydub
