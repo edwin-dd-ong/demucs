@@ -40,7 +40,7 @@ def process_audio():
         "--two-stems", "vocals",
         "-n", "d6b2e963",
         "-o", output_dir,
-        "--repo", "release_models",
+        "--repo", "./release_models",
         input_file_path
         ])
         print(f"Processed audio file: {input_file_path}")
