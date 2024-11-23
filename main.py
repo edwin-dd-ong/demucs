@@ -41,7 +41,7 @@ def process_audio():
         # Construct the absolute path to the release_models directory
         release_models_path = os.path.join(current_dir, 'release_models')
 
-        print(f"Using release models path: {release_models_path}")
+        sys.stderr.write(f"Using release models path: {release_models_path}")
 
         # Process the entire audio file with Demucs
         separate.main([
