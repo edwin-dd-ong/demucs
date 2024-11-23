@@ -6,6 +6,7 @@ from pydub.playback import play
 from demucs import separate
 from flask_cors import CORS
 import shutil
+import sys
 
 
 app = Flask(__name__)
@@ -42,6 +43,7 @@ def process_audio():
         release_models_path = os.path.join(current_dir, 'release_models')
 
         sys.stderr.write(f"Using release models path: {release_models_path}")
+        sys.stderr.write(os.getcwd())
 
         # Process the entire audio file with Demucs
         separate.main([
