@@ -3,9 +3,10 @@ import tempfile
 from flask import Flask, request, jsonify, send_file, Response
 from pydub import AudioSegment
 from pydub.playback import play
-import demucs.separate
+from demucs import separate
 from flask_cors import CORS
 import shutil
+
 
 app = Flask(__name__)
 CORS(app)
@@ -35,10 +36,11 @@ def process_audio():
     try:
 
         # Process the entire audio file with Demucs
-        demucs.separate.main([
+        separate.main([
         "--two-stems", "vocals",
-        "-n", "htdemucs",
+        "-n", "d6b2e963",
         "-o", output_dir,
+        "--repo", "release_models",
         input_file_path
         ])
         print(f"Processed audio file: {input_file_path}")
