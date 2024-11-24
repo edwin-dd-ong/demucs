@@ -12,6 +12,16 @@ import sys
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/list-working-dir', methods=['GET'])
+def list_working_dir():
+    import os
+    # Get the current working directory
+    cwd = os.getcwd()
+    # List all files and directories in the working directory
+    files = os.listdir(cwd)
+    return f"Current working directory: {cwd}<br>Contents:<br>{'<br>'.join(files)}"
+
+
 @app.route('/', methods=['GET', 'POST'])
 def process_audio():
     if request.method == 'GET':
@@ -43,7 +53,6 @@ def process_audio():
         release_models_path = os.path.join(current_dir, 'release_models')
 
         sys.stderr.write(f"Using release models path: {release_models_path}")
-        sys.stderr.write(f"Current working directory: {os.getcwd()}\n")
 
         # Process the entire audio file with Demucs
         separate.main([
