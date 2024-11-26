@@ -1,0 +1,15 @@
+# please make sure you have already a pytorch install that is cuda enabled!
+flask
+flask_cors
+gunicorn
+dora-search
+einops
+julius>=0.2.3
+lameenc>=1.2
+openunmix
+pyyaml
+torch==2.0.1
+torchaudio==2.0.2
+tqdm
+numpy==1.26.4
+pydub
